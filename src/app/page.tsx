@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Assessment } from "./assessment";
 
 export function Header() {
   return (
@@ -58,15 +59,17 @@ export function SignIn({
 }
 
 export function Dashboard({
-  onLogout
+  onLogout,
+  onConsult
 }: {
-  onLogout?: () => void;  
+  onLogout?: () => void;
+  onConsult?: () => void;  
 }) {
   return (
     <div className="text-center h-screen justify-items-center content-evenly">
       <div className="flex mb-[20px] mt-[-140px]">
         <div className="mr-[20px] bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl">Profile</div>
-        <div className="bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl">Consult</div>
+        <div className="bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl" onClick={onConsult}>Consult</div>
       </div>
       <div className="flex">
         <div className="mr-[20px] bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl">Results</div>
@@ -79,6 +82,7 @@ export function Dashboard({
 export default function Home() {
   const [usertype, setUserType] = useState<'patient' | 'user'>('patient');
   const [isSignInClicked, setIsSignInClicked] = useState<boolean>(false);
+  const [isConsultClicked, setIsConsultClicked] = useState<boolean>(false);
 
   const handleSignIn = () => {
     setIsSignInClicked(true);
@@ -88,11 +92,26 @@ export default function Home() {
     setIsSignInClicked(false);
   };
 
+  const handleConsult = () => {
+    setIsConsultClicked(true);
+  };
+
+  const handleBackToDashboard = () => {
+    setIsConsultClicked(false);
+    setIsSignInClicked(true);
+  };
+
   return (
     <div className="h-screen bg-white text-black">
       <Header />
       {
-        isSignInClicked ? <Dashboard onLogout={handleLogout} /> : <SignIn usertype={usertype} setUserType={setUserType} onSignIn={handleSignIn} />
+        isConsultClicked ? (
+          <Assessment onBackToDashboard={handleBackToDashboard} />
+        ) : isSignInClicked ? (
+          <Dashboard onLogout={handleLogout} onConsult={handleConsult} />
+        ) : (
+          <SignIn usertype={usertype} setUserType={setUserType} onSignIn={handleSignIn} />
+        )
       }
     </div>
   );
