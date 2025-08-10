@@ -124,12 +124,19 @@ export function Assessment({
       </style>
       {/* Toolbar at the top, after header */}
       <div className="btn-toolbar">
-        <button onClick={handleSave} className="my-btn" type="button">Save</button>
-        <button onClick={handleClear} className="my-btn" type="button">Clear</button>
-        <button onClick={handleClearAll} className="my-btn" type="button">Clear All</button>
-        <button onClick={handleBackToDashboard} className="my-btn" type="button">Back to Dashboard</button>
-        {!isNextClicked && (
-          <button onClick={handleFirstNext} className="my-btn" type="button">Start Assessment</button>
+        {isNextClicked ? (
+          <>
+            <button onClick={handleSave} className="my-btn" type="button">Save</button>
+            <button onClick={handleClear} className="my-btn" type="button">Clear</button>
+            <button onClick={handleClearAll} className="my-btn" type="button">Clear All</button>
+            <button onClick={handleBackToDashboard} className="my-btn" type="button">Back to Dashboard</button>
+          </>
+        ) : (
+          <>
+            <button onClick={handleSave} className="my-btn" type="button">Save</button>
+            <button onClick={handleBackToDashboard} className="my-btn" type="button">Back to Dashboard</button>
+            <button onClick={handleFirstNext} className="my-btn" type="button">Start Assessment</button>
+          </>
         )}
       </div>
       {/* Navigation buttons below toolbar */}
