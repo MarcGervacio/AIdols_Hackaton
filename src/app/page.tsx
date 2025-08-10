@@ -3,9 +3,17 @@ import { useState } from "react";
 import { Assessment } from "./assessment";
 
 export function Header() {
+  const [isSignInClicked, setIsSignInClicked] = useState<boolean>(false);
+  const [isConsultClicked, setIsConsultClicked] = useState<boolean>(false);
+  const handleBackToDashboard = () => {
+    setIsConsultClicked(false);
+    setIsSignInClicked(true);
+  };
+
+
   return (
-    <div className="bg-blue-500 p-5 text-lg">
-      <label className="text-white">TB Dots</label>
+    <div className="bg-teal-500 p-5 text-lg">
+      <button className="cursor-pointer text-white" onClick={() => handleBackToDashboard()}>TB Dots</button>
     </div>
   )
 }
@@ -47,12 +55,12 @@ export function SignIn({
       }
 
       <div className="grid mt-[15px] justify-evenly ml-[25px]">
-        <button className="w-[340px] p-[5px] w-[200px] bg-blue-500 text-white rounded-[20px] justify-evenly" onClick={onSignIn}>Sign In</button>
-        <button className="w-[340px] p-[5px] w-[200px] mt-[10px] bg-blue-500 text-white rounded-[20px] justify-evenly">Sign Up</button>
+        <button className="cursor-pointer hover:bg-teal-600 w-[340px] p-[5px] w-[200px] bg-teal-500 text-white rounded-[20px] justify-evenly" onClick={onSignIn}>Sign In</button>
+        <button className="cursor-pointer hover:bg-teal-600 w-[340px] p-[5px] w-[200px] mt-[10px] bg-teal-500 text-white rounded-[20px] justify-evenly">Sign Up</button>
       </div>
       <div className="mt-[20px]">
-        <button onClick={() => setUserType('patient')} className="mr-[25px] ml-[70px] bg-blue-500 p-[30px] text-white text-xl rounded-[20px]">Patient</button>
-        <button onClick={() => setUserType('user')} className="mr-[50px] bg-blue-500 p-[30px] text-white text-xl rounded-[20px]">User</button>
+        <button onClick={() => setUserType('patient')} className="cursor-pointer hover:bg-teal-600 mr-[25px] ml-[70px] bg-teal-500 p-[30px] text-white text-xl rounded-[20px]">Patient</button>
+        <button onClick={() => setUserType('user')} className="cursor-pointer hover:bg-teal-600 mr-[50px] bg-teal-500 p-[30px] text-white text-xl rounded-[20px]">User</button>
       </div>
     </div>
   );
@@ -68,12 +76,12 @@ export function Dashboard({
   return (
     <div className="text-center h-screen justify-items-center content-evenly">
       <div className="flex mb-[20px] mt-[-140px]">
-        <div className="mr-[20px] bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl">Profile</div>
-        <div className="bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl" onClick={onConsult}>Consult</div>
+        <div className="cursor-pointer hover:bg-teal-600 mr-[20px] bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl">Profile</div>
+        <div className="cursor-pointer hover:bg-teal-600 bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl" onClick={onConsult}>Consult</div>
       </div>
       <div className="flex">
-        <div className="mr-[20px] bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl">Results</div>
-        <div className="bg-blue-500 border border-[var(--color-blue-500)] p-[50px] text-white text-xl" onClick={onLogout}>Logout</div>
+        <div className="cursor-pointer hover:bg-teal-600 mr-[20px] bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl">Results</div>
+        <div className="cursor-pointer hover:bg-teal-600 bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl" onClick={onLogout}>Logout</div>
       </div>
     </div>
   );

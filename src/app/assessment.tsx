@@ -58,8 +58,8 @@ export function Assessment({
                 <div>
                   <div>Question #{currentQuestion + 1}: {assessmentQuestions[currentQuestion].question}</div>
                   <div>
-                    <button className="mt-[10px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Yes</button>
-                    <button className="mt-[10px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">No</button>
+                    <button className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Yes</button>
+                    <button className="cursor-pointer hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">No</button>
                   </div>
                 </div>
               )
@@ -106,20 +106,20 @@ export function Navigation({
       {
         !isInAgreementPolicy ? (
           <div>
-            <button onClick={onPreviousQuestion} className="mt-[30px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
-            <button onClick={onNextQuestion} className="mt-[30px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
-            <button onClick={onBackToDashboard} className="mt-[30px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
+            <button onClick={onPreviousQuestion} className="cursor-pointer hover:bg-teal-600 mt-[30px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
+            <button onClick={onNextQuestion} className="cursor-pointer hover:bg-teal-600 mt-[30px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
+            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[30px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
           </div>
         ) : isAssessmentCompleted ? (
           <div>
-            <button onClick={onPreviousQuestion} className="mt-[10px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
-            <button className="mt-[10px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Finish</button>
-            <button onClick={onBackToDashboard} className="mt-[10px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
+            <button onClick={onPreviousQuestion} className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
+            <button className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Finish</button>
+            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
           </div>
         ) : (
           <div>
-            <button onClick={onNextQuestion} className="mt-[10px] mr-[15px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
-            <button onClick={onBackToDashboard} className="mt-[10px] bg-blue-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
+            <button onClick={onNextQuestion} className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
+            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
           </div>
         )
       }
