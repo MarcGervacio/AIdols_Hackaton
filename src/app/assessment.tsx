@@ -1,24 +1,15 @@
-"use client";
-
 import { useState } from "react";
 
 const assessmentQuestions = [
-  {
-    question: "Persistent cough? (=> 2 weeks)"
-  },
-  {
-    question: "Cough with phlegm or sputum?"
-  },
-  {
-    question: "Blood-streaked sputum (hemoptysis)?"
-  },
-  {
-    question: "Chest pain during coughing/breathing?"
-  },
-  {
-    question: "Shortness of breath?"
-  }
+  { question: "Persistent cough? (=> 2 weeks)" },
+  { question: "Cough with phlegm or sputum?" },
+  { question: "Blood-streaked sputum (hemoptysis)?" },
+  { question: "Chest pain during coughing/breathing?" },
+  { question: "Shortness of breath?" }
 ];
+
+// Store answers outside the component to persist across unmounts/remounts
+let savedAnswers: (boolean | null)[] = Array(assessmentQuestions.length).fill(null);
 
 export function Assessment({
   onBackToDashboard
@@ -27,9 +18,10 @@ export function Assessment({
 }) {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isNextClicked, setIsNextClicked] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<(boolean | null)[]>([...savedAnswers]);
 
   const handleNext = () => {
-    if (currentQuestion <= assessmentQuestions.length) {
+    if (currentQuestion < assessmentQuestions.length) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
@@ -46,83 +38,188 @@ export function Assessment({
     setIsNextClicked(true);
   };
 
+  const answerSelected = answers[currentQuestion] !== null;
+
+  const handleAnswer = (ans: boolean) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = ans;
+    setAnswers(newAnswers);
+  };
+
+  // Save answers to the persistent variable
+  const handleSave = () => {
+    savedAnswers = [...answers];
+    alert("Answers saved!");
+  };
+
+  // Clear only the current question's answer
+  const handleClear = () => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = null;
+    setAnswers(newAnswers);
+  };
+
+  // Clear all answers with confirmation
+  const handleClearAll = () => {
+    if (window.confirm("Are you sure you want to clear all answers? This cannot be undone.")) {
+      const cleared = Array(assessmentQuestions.length).fill(null);
+      setAnswers(cleared);
+    }
+  };
+
+  // Confirm before leaving to dashboard
+  const handleBackToDashboard = () => {
+    if (window.confirm("Are you sure you want to go back to the dashboard? Please click 'Save' first if you want to keep your changes.")) {
+      if (onBackToDashboard) onBackToDashboard();
+    }
+  };
+
   return (
-    <div>
-      {
-        isNextClicked ? (
-          <div className="text-center h-screen justify-items-center content-evenly">
-            {
-              (currentQuestion === assessmentQuestions.length) ? (
-                <h1>Thank you for completing the assessment!</h1>
-              ) : (
-                <div>
-                  <div>Question #{currentQuestion + 1}: {assessmentQuestions[currentQuestion].question}</div>
-                  <div>
-                    <button className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Yes</button>
-                    <button className="cursor-pointer hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">No</button>
-                  </div>
-                </div>
-              )
+    <div style={{ minHeight: "100vh", boxSizing: "border-box", padding: "0 8px" }}>
+      <style>
+        {`
+          .my-btn {
+            background-color: #14b8a6;
+            color: #fff;
+            padding: 12px 18px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+            min-width: 120px;
+            max-width: 100vw;
+            word-break: break-word;
+          }
+          .my-btn:hover,
+          .my-btn.selected {
+            background-color: #115e59;
+          }
+          .btn-toolbar, .btn-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+          }
+          .btn-toolbar {
+            margin-top: 20px;
+            margin-bottom: 0;
+          }
+          .btn-nav {
+            margin-top: 0;
+            margin-bottom: 30px;
+          }
+          @media (max-width: 600px) {
+            .my-btn {
+              min-width: 90px;
+              font-size: 0.95rem;
+              padding: 10px 8px;
             }
-            <Navigation onNextQuestion={handleNext} onPreviousQuestion={handlePrevious} onBackToDashboard={onBackToDashboard} isInAgreementPolicy={currentQuestion === assessmentQuestions.length} isAssessmentCompleted={currentQuestion === assessmentQuestions.length} />
-          </div>
-        ) : (
-          <div className="text-center h-screen justify-items-center content-evenly">
-            <h1>Agreement Policy</h1>
-            <p className="overflow-y-auto h-[70%]">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+          }
+        `}
+      </style>
+      {/* Toolbar at the top, after header */}
+      <div className="btn-toolbar">
+        <button onClick={handleSave} className="my-btn" type="button">Save</button>
+        <button onClick={handleClear} className="my-btn" type="button">Clear</button>
+        <button onClick={handleClearAll} className="my-btn" type="button">Clear All</button>
+        <button onClick={handleBackToDashboard} className="my-btn" type="button">Back to Dashboard</button>
+        {!isNextClicked && (
+          <button onClick={handleFirstNext} className="my-btn" type="button">Start Assessment</button>
+        )}
+      </div>
+      {/* Navigation buttons below toolbar */}
+      {isNextClicked && (
+        <div className="btn-nav">
+          <button
+            onClick={handlePrevious}
+            className="my-btn"
+            type="button"
+            disabled={currentQuestion === 0 && !isNextClicked}
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNext}
+            className="my-btn"
+            type="button"
+            disabled={!answerSelected || currentQuestion === assessmentQuestions.length}
+            style={
+              (!answerSelected || currentQuestion === assessmentQuestions.length)
+                ? { opacity: 0.5, cursor: "not-allowed" }
+                : {}
+            }
+          >
+            Next
+          </button>
+        </div>
+      )}
+      {isNextClicked ? (
+        <div
+          className="text-center h-screen justify-items-center content-evenly"
+          style={{ paddingTop: 0, marginTop: "-181px" }}
+        >
+          {currentQuestion === assessmentQuestions.length ? (
+            <div>
+              <h1>Thank you for completing the assessment!</h1>
+              <button
+                className="my-btn"
+                type="button"
+                onClick={() => {
+                  savedAnswers = [...answers];
+                  alert("All answers are saved");
+                  alert("We will review all of your answers and email you for the next steps after the review. Thank you.");
+                  if (onBackToDashboard) onBackToDashboard();
+                }}
+              >
+                Finish
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div>Question #{currentQuestion + 1}: {assessmentQuestions[currentQuestion].question}</div>
+              <div>
+                <button
+                  className={`my-btn${answers[currentQuestion] === true ? " selected" : ""}`}
+                  onClick={() => handleAnswer(true)}
+                  type="button"
+                >
+                  Yes
+                </button>
+                <button
+                  className={`my-btn${answers[currentQuestion] === false ? " selected" : ""}`}
+                  onClick={() => handleAnswer(false)}
+                  type="button"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          className="text-center h-screen justify-items-center content-evenly"
+          style={{ marginTop: "-140px" }} // Reduce top space for Agreement Policy
+        >
+          <h1>Agreement Policy</h1>
+          <p className="overflow-y-auto h-[60%]">
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-            </p>
-            <Navigation onNextQuestion={handleFirstNext} onBackToDashboard={onBackToDashboard} isInAgreementPolicy={true} isAssessmentCompleted={false} />
-          </div>
-        )
-      }
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+          </p>
+        </div>
+      )}
     </div>
-  )
-}
-
-export function Navigation({
-  isInAgreementPolicy = false,
-  isAssessmentCompleted = false,
-  onPreviousQuestion,
-  onNextQuestion,
-  onBackToDashboard
-}: {
-  isInAgreementPolicy: boolean;
-  isAssessmentCompleted: boolean
-  onPreviousQuestion?: () => void;
-  onNextQuestion?: () => void;
-  onBackToDashboard?: () => void;
-}) {
-  return (
-    <div>
-      {
-        !isInAgreementPolicy ? (
-          <div>
-            <button onClick={onPreviousQuestion} className="cursor-pointer hover:bg-teal-600 mt-[30px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
-            <button onClick={onNextQuestion} className="cursor-pointer hover:bg-teal-600 mt-[30px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
-            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[30px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
-          </div>
-        ) : isAssessmentCompleted ? (
-          <div>
-            <button onClick={onPreviousQuestion} className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Previous</button>
-            <button className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Finish</button>
-            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
-          </div>
-        ) : (
-          <div>
-            <button onClick={onNextQuestion} className="cursor-pointer hover:bg-teal-600 mt-[10px] mr-[15px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Next</button>
-            <button onClick={onBackToDashboard} className="hover:bg-teal-600 mt-[10px] bg-teal-500 p-[15px] text-white text-m rounded-[20px]">Back to Dashboard</button>
-          </div>
-        )
-      }
-    </div>
-  )
+  );
 }

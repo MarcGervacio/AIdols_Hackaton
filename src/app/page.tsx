@@ -10,10 +10,43 @@ export function Header() {
     setIsSignInClicked(true);
   };
 
-
   return (
     <div className="bg-teal-500 p-5 text-lg">
-      <button className="cursor-pointer text-white" onClick={() => handleBackToDashboard()}>TB Dots</button>
+      <style>
+        {`
+          .my-btn {
+            background-color: #14b8a6;
+            color: #fff;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+          }
+          .my-btn:hover,
+          .my-btn.selected {
+            background-color: #115e59;
+          }
+          .my-tile {
+            background-color: #14b8a6;
+            color: #fff;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 50px;
+            margin-right: 20px;
+            transition: background 0.2s;
+            display: inline-block;
+          }
+          .my-tile:hover {
+            background-color: #115e59;
+          }
+        `}
+      </style>
+      <button className="my-btn" onClick={handleBackToDashboard}>TB Dots</button>
     </div>
   )
 }
@@ -29,6 +62,25 @@ export function SignIn({
 }) {
   return (
     <div className="text-center h-screen">
+      <style>
+        {`
+          .my-btn {
+            background-color: #14b8a6;
+            color: #fff;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+          }
+          .my-btn:hover,
+          .my-btn.selected {
+            background-color: #115e59;
+          }
+        `}
+      </style>
       {
         usertype === 'patient' ? 
           <div className="inline-grid mt-[25vh] ml-[3vh] w-[340px]">
@@ -55,12 +107,12 @@ export function SignIn({
       }
 
       <div className="grid mt-[15px] justify-evenly ml-[25px]">
-        <button className="cursor-pointer hover:bg-teal-600 w-[340px] p-[5px] w-[200px] bg-teal-500 text-white rounded-[20px] justify-evenly" onClick={onSignIn}>Sign In</button>
-        <button className="cursor-pointer hover:bg-teal-600 w-[340px] p-[5px] w-[200px] mt-[10px] bg-teal-500 text-white rounded-[20px] justify-evenly">Sign Up</button>
+        <button className="my-btn w-[340px] w-[200px] justify-evenly" onClick={onSignIn}>Sign In</button>
+        <button className="my-btn w-[340px] w-[200px] mt-[10px] justify-evenly">Sign Up</button>
       </div>
       <div className="mt-[20px]">
-        <button onClick={() => setUserType('patient')} className="cursor-pointer hover:bg-teal-600 mr-[25px] ml-[70px] bg-teal-500 p-[30px] text-white text-xl rounded-[20px]">Patient</button>
-        <button onClick={() => setUserType('user')} className="cursor-pointer hover:bg-teal-600 mr-[50px] bg-teal-500 p-[30px] text-white text-xl rounded-[20px]">User</button>
+        <button onClick={() => setUserType('patient')} className="my-btn mr-[25px] ml-[70px] text-xl">Patient</button>
+        <button onClick={() => setUserType('user')} className="my-btn mr-[50px] text-xl">User</button>
       </div>
     </div>
   );
@@ -75,13 +127,31 @@ export function Dashboard({
 }) {
   return (
     <div className="text-center h-screen justify-items-center content-evenly">
+      <style>
+        {`
+          .my-tile {
+            background-color: #14b8a6;
+            color: #fff;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 50px;
+            transition: background 0.2s;
+            display: inline-block;
+          }
+          .my-tile:hover {
+            background-color: #115e59;
+          }
+        `}
+      </style>
       <div className="flex mb-[20px] mt-[-140px]">
-        <div className="cursor-pointer hover:bg-teal-600 mr-[20px] bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl">Profile</div>
-        <div className="cursor-pointer hover:bg-teal-600 bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl" onClick={onConsult}>Consult</div>
+        <div className="my-tile">Profile</div>
+        <div className="my-tile" onClick={onConsult}>Consult</div>
       </div>
       <div className="flex">
-        <div className="cursor-pointer hover:bg-teal-600 mr-[20px] bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl">Results</div>
-        <div className="cursor-pointer hover:bg-teal-600 bg-teal-500 border border-[var(--color-teal-500)] p-[50px] text-white text-xl" onClick={onLogout}>Logout</div>
+        <div className="my-tile">Results</div>
+        <div className="my-tile" onClick={onLogout}>Logout</div>
       </div>
     </div>
   );
