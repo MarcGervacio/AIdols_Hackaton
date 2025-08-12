@@ -1,11 +1,62 @@
 import { useState } from "react";
 
 const assessmentQuestions = [
-  { question: "Persistent cough? (=> 2 weeks)" },
-  { question: "Cough with phlegm or sputum?" },
-  { question: "Blood-streaked sputum (hemoptysis)?" },
-  { question: "Chest pain during coughing/breathing?" },
-  { question: "Shortness of breath?" }
+  {
+    question: "Persistent cough? (=> 2 weeks)",
+    criticalityLevel: 20
+  },
+  {
+    question: "Cough with phlegm or sputum?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Blood-streaked sputum (hemoptysis)?",
+    criticalityLevel: 20
+  },
+  {
+    question: "Chest pain during coughing/breathing?",
+    criticalityLevel: 5
+  },
+  {
+    question: "Shortness of breath?",
+    criticalityLevel: 5
+  },
+  {
+    question: "Fever (especially night fevers) lSTING > 1 week?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Night sweats?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Unexplained weight loss?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Loss od appetite?",
+    criticalityLevel: 5
+  },
+  {
+    question: "Fatigue or general weakness?",
+    criticalityLevel: 5
+  },
+  {
+    question: "Close contact with known TB case?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Previously diagnosed/treated for TB?",
+    criticalityLevel: 10
+  },
+  {
+    question: "Living/working in high-risk setting?",
+    criticalityLevel: 5
+  },
+  {
+    question: "Underlying conditions (HIV, diabetes, etc.)?",
+    criticalityLevel: 10
+  }
 ];
 
 // Store answers outside the component to persist across unmounts/remounts
