@@ -63,9 +63,11 @@ const assessmentQuestions = [
 let savedAnswers: (boolean | null)[] = Array(assessmentQuestions.length).fill(null);
 
 export function Assessment({
-  onBackToDashboard
+  onBackToDashboard,
+  onFinish // <-- add this
 }: {
   onBackToDashboard?: () => void;
+  onFinish?: () => void;
 }) {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [isNextClicked, setIsNextClicked] = useState<boolean>(false);
@@ -231,7 +233,7 @@ export function Assessment({
                   savedAnswers = [...answers];
                   alert("All answers are saved");
                   alert("We will review all of your answers and email you for the next steps after the review. Thank you.");
-                  if (onBackToDashboard) onBackToDashboard();
+                  if (onFinish) onFinish(); // <-- call finish callback
                 }}
               >
                 Finish
