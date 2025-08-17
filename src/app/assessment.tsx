@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { generateTestResult } from "./consult";
 
-const assessmentQuestions = [
+export const assessmentQuestions = [
   {
     question: "Persistent cough? (=> 2 weeks)",
     criticalityLevel: 20
@@ -59,8 +60,8 @@ const assessmentQuestions = [
   }
 ];
 
-// Store answers outside the component to persist across unmounts/remounts
-let savedAnswers: (boolean | null)[] = Array(assessmentQuestions.length).fill(null);
+// Export savedAnswers so it can be shared across files
+export let savedAnswers: (boolean | null)[] = Array(assessmentQuestions.length).fill(null);
 
 export function Assessment({
   onBackToDashboard,
@@ -231,9 +232,11 @@ export function Assessment({
                 type="button"
                 onClick={() => {
                   savedAnswers = [...answers];
+                  const testResult = generateTestResult(answers);
                   alert("All answers are saved");
                   alert("We will review all of your answers and email you for the next steps after the review. Thank you.");
-                  if (onFinish) onFinish(); // <-- call finish callback
+                  // You can log or send testResult to backend here if needed
+                  if (onFinish) onFinish();
                 }}
               >
                 Finish
